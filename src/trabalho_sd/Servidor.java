@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package trabalho_sd;
 
 import java.rmi.Naming;
@@ -14,10 +8,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author matheusenes
- */
 public class Servidor implements LerEscrever {
     
     private Semaforo semaforoArq1 = new Semaforo();
@@ -94,20 +84,13 @@ public class Servidor implements LerEscrever {
     public static void main(String[] args) {
         try { 
             
-//            //Cria o servidor
-//            Servidor obj = new Servidor(); 
-//            //"Liga" o servidor com seu nome de registro
-//            Naming.rebind("servidor", obj); 
-//            
-//            System.out.println("servidor registrado!"); 
+            //Cria o servidor
+            Servidor obj = new Servidor(); 
+            //"Liga" o servidor com seu nome de registro
+            Naming.rebind("servidor", obj); 
             
-            
-            String name = "servidor";
-            LerEscrever engine = new Servidor();
-            LerEscrever stub = (LerEscrever) UnicastRemoteObject.exportObject(engine, 0);
-            Registry registry = LocateRegistry.getRegistry();
-            registry.rebind(name, stub);
-            
+            System.out.println("servidor registrado!"); 
+                        
             System.out.println("servidor registrado!"); 
             
             }catch (Exception ex) { 
