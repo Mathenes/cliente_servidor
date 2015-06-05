@@ -7,13 +7,15 @@ import java.util.logging.Logger;
 public class Escrita implements Runnable {
 
     Semaforo semaforo;
+    Semaforo_geral semaforoGeral;
     List<String> arq;
     String letra;
     int id;
     int idCliente;
 
-    public Escrita(Semaforo semaforo, List<String> arq, String letra, int id, int idCliente) {
+    public Escrita(Semaforo semaforo,Semaforo_geral semaforoGeral, List<String> arq, String letra, int id, int idCliente) {
         this.semaforo = semaforo;
+        this.semaforoGeral = semaforoGeral;
         this.arq = arq;
         this.letra = letra;
         this.id = id;
@@ -26,6 +28,7 @@ public class Escrita implements Runnable {
             int i = 0;
             while (true) {
                 i++;
+                semaforoGeral.downEscrita();
                 semaforo.downEscrita();
                 
                 System.out.println("|cliente: " + idCliente + "|" + "escrita: " + id + "|" + "começou a escrever!");
@@ -34,7 +37,7 @@ public class Escrita implements Runnable {
                 System.out.println("|cliente: " + idCliente + "|" + "escrita: " + id + "|" + "terminou de escrever!");
                 
                 semaforo.upEscrita();
-                
+                semaforoGeral.up();
                 Thread.sleep(i % 200);
             }
 

@@ -7,12 +7,14 @@ import java.util.logging.Logger;
 public class Leitura implements Runnable {
 
     Semaforo semaforo;
+    Semaforo_geral semaforoGeral;
     List<String> arq;
     int id;
     int idCliente;
 
-    public Leitura(Semaforo semaforo, List<String> arq, int id, int idCliente) {
+    public Leitura(Semaforo semaforo, Semaforo_geral semaforoGeral, List<String> arq, int id, int idCliente) {
         this.semaforo = semaforo;
+        this.semaforoGeral = semaforoGeral;
         this.arq = arq;
         this.id = id;
         this.idCliente = idCliente;
@@ -25,8 +27,8 @@ public class Leitura implements Runnable {
             int i = 0;
             while (true) {
                 i++;
-                String letras = new String();
-                
+                String letras = new String( );
+                semaforoGeral.downLeitura();
                 semaforo.downLeitura();
                 
                 System.out.println("|cliente: " + idCliente + "|" + "leitura: " + id + "|" + "começou a ler!");

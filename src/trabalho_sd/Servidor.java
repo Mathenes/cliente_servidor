@@ -11,6 +11,7 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
     private Semaforo semaforoArq1 = new Semaforo();
     private Semaforo semaforoArq2 = new Semaforo();
     private Semaforo semaforoArq3 = new Semaforo();
+    private Semaforo_geral semaforoGeral = new Semaforo_geral();
     private List<String> arq1 = new ArrayList<>();
     private List<String> arq2 = new ArrayList<>();
     private List<String> arq3 = new ArrayList<>();
@@ -30,13 +31,13 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
 
             switch (idArq) {
                 case 1:
-                    leitura = new Leitura(semaforoArq1, arq1, indiceLeitores[idCliente - 1], idCliente);
+                    leitura = new Leitura(semaforoArq1, semaforoGeral, arq1, indiceLeitores[idCliente - 1], idCliente);
                     break;
                 case 2:
-                    leitura = new Leitura(semaforoArq2, arq2, indiceLeitores[idCliente - 1], idCliente);
+                    leitura = new Leitura(semaforoArq2, semaforoGeral, arq2, indiceLeitores[idCliente - 1], idCliente);
                     break;
                 case 3:
-                    leitura = new Leitura(semaforoArq3, arq3, indiceLeitores[idCliente - 1], idCliente);
+                    leitura = new Leitura(semaforoArq3, semaforoGeral, arq3, indiceLeitores[idCliente - 1], idCliente);
                     break;
             }
 
@@ -58,13 +59,13 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
 
             switch (idArq) {
                 case 1:
-                    escrita = new Escrita(semaforoArq1, arq1, letra, indiceEscritores[idCliente - 1], idCliente);
+                    escrita = new Escrita(semaforoArq1, semaforoGeral, arq1, letra, indiceEscritores[idCliente - 1], idCliente);
                     break;
                 case 2:
-                    escrita = new Escrita(semaforoArq2, arq2, letra, indiceEscritores[idCliente - 1], idCliente);
+                    escrita = new Escrita(semaforoArq2, semaforoGeral, arq2, letra, indiceEscritores[idCliente - 1], idCliente);
                     break;
                 case 3:
-                    escrita = new Escrita(semaforoArq3, arq3, letra, indiceEscritores[idCliente - 1], idCliente);
+                    escrita = new Escrita(semaforoArq3, semaforoGeral, arq3, letra, indiceEscritores[idCliente - 1], idCliente);
                     break;
             }
 
