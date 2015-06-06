@@ -1,27 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trabalho_sd;
 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author matheusenes
- */
 public class Leitura implements Runnable {
 
     Semaforo semaforo;
+    Semaforo_geral semaforoGeral;
     List<String> arq;
     int id;
     int idCliente;
 
-    public Leitura(Semaforo semaforo, List<String> arq, int id, int idCliente) {
+    public Leitura(Semaforo semaforo, Semaforo_geral semaforoGeral, List<String> arq, int id, int idCliente) {
         this.semaforo = semaforo;
+        this.semaforoGeral = semaforoGeral;
         this.arq = arq;
         this.id = id;
         this.idCliente = idCliente;
@@ -34,8 +27,8 @@ public class Leitura implements Runnable {
             int i = 0;
             while (true) {
                 i++;
-                String letras = new String();
-                
+                String letras = new String( );
+                semaforoGeral.downLeitura();
                 semaforo.downLeitura();
                 
                 System.out.println("|cliente: " + idCliente + "|" + "leitura: " + id + "|" + "começou a ler!");
@@ -46,6 +39,7 @@ public class Leitura implements Runnable {
                 System.out.println("|cliente: " + idCliente + "|" + "leitura: " + id + "|" + "terminou de ler!");
                 
                 semaforo.upLeitura();
+                semaforoGeral.up();
                 
                 Thread.sleep(i % 190);
             }
