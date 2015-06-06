@@ -1,2 +1,2 @@
 # cliente_servidor
-# Sem prioridades!
+# Com prioridade para escrita!
