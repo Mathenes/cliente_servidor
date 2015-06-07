@@ -1,34 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package trabalho_sd;
 
-/**
- *
- * @author giova_000
- */
 public class Semaforo_geral {
-    
-    private int mutex = 0;
-    
-    public synchronized void up() throws InterruptedException{
-        mutex--;
+
+    private int qntEscritores = 0;
+
+    public synchronized void up() throws InterruptedException {
+        qntEscritores--;
         notifyAll();
-    } 
-    
-    public synchronized void downLeitura() throws InterruptedException{
-        while (mutex > 0){
-            System.out.println("###### BLOQUEIO DE PRIORIDADE #####");
+    }
+
+    public synchronized void downLeitura() throws InterruptedException {
+        while (qntEscritores > 0) {
+            System.out.println("###### BLOQUEIO DA LEITURA (PRIORIDADE DE ESCRITA) #####");
             wait();
         }
-        System.out.println("##### DESBLOQUEIO DE PRIORIDADE #####");
+        System.out.println("##### DESBLOQUEIO DA LEITURA (PRIORIDADE DE ESCRITA) #####");
     }
-    
-    public synchronized void downEscrita() throws InterruptedException{
-        mutex++;
+
+    public synchronized void downEscrita() throws InterruptedException {
+        qntEscritores++;
     }
-    
+
 }
