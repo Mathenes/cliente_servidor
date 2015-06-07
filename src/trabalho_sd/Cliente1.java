@@ -12,8 +12,14 @@ public class Cliente1 {
         try {
             obj = (LerEscrever) Naming.lookup("//localhost" + "/servidor");
             
-            obj.ler(1, id);
-            obj.escrever(1, "A", id);
+            for (int i = 0; i < 10000; i++) {
+                obj.ler("arquivo_1",0,1,id);
+            }
+            
+//            for (int i = 0; i < 100; i++) {
+//                obj.escrever("arquivo_1", 1,"aaaaaaaa", id);
+//            }
+            
             
         } catch (Exception e) {
             System.out.println("HelloClient exception: " + e.getMessage());

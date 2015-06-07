@@ -1,42 +1,56 @@
 package trabalho_sd;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Servidor extends UnicastRemoteObject implements LerEscrever {
 
     private Semaforo semaforoArq1 = new Semaforo();
     private Semaforo semaforoArq2 = new Semaforo();
     private Semaforo semaforoArq3 = new Semaforo();
-    private List<String> arq1 = new ArrayList<>();
-    private List<String> arq2 = new ArrayList<>();
-    private List<String> arq3 = new ArrayList<>();
 
-    int[] indiceLeitores = new int[3];
-    int[] indiceEscritores = new int[3];
+    private BufferedReader leitor_arquivo_1;
+    private BufferedReader leitor_arquivo_2;
+    private BufferedReader leitor_arquivo_3;
+    
+    private BufferedWriter escritor_arquivo_1;
+    private BufferedWriter escritor_arquivo_2;
+    private BufferedWriter escritor_arquivo_3;
+    
+    String caminho_arq_1 = "arquivo_1.txt";
+    String caminho_arq_2 = "arquivo_2.txt";
+    String caminho_arq_3 = "arquivo_3.txt";
 
     public Servidor() throws RemoteException {
         super();
     }
 
     @Override
-    public void ler(int idArq, int idCliente) {
+    public void ler(String nomeArquivo, int numeroLinha, int qntLinhas, int idCliente) {
         try {
             Leitura leitura = null;
-            indiceLeitores[idCliente - 1]++;
 
-            switch (idArq) {
-                case 1:
-                    leitura = new Leitura(semaforoArq1, arq1, indiceLeitores[idCliente - 1], idCliente);
+            switch (nomeArquivo) {
+                case "arquivo_1":
+                    leitor_arquivo_1 = new BufferedReader(new FileReader(caminho_arq_1));
+                    leitura = new Leitura(semaforoArq1, leitor_arquivo_1, numeroLinha, qntLinhas, idCliente);
                     break;
-                case 2:
-                    leitura = new Leitura(semaforoArq2, arq2, indiceLeitores[idCliente - 1], idCliente);
+                case "arquivo_2":
+                    leitor_arquivo_2 = new BufferedReader(new FileReader(caminho_arq_2));
+                    leitura = new Leitura(semaforoArq2, leitor_arquivo_2, numeroLinha, qntLinhas, idCliente);
                     break;
-                case 3:
-                    leitura = new Leitura(semaforoArq3, arq3, indiceLeitores[idCliente - 1], idCliente);
+                case "arquivo_3":
+                    leitor_arquivo_3 = new BufferedReader(new FileReader(caminho_arq_3));
+                    leitura = new Leitura(semaforoArq3, leitor_arquivo_3, numeroLinha, qntLinhas, idCliente);
                     break;
             }
 
@@ -44,27 +58,29 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
 
             thread.start();
 
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Erro no Array");
+        } catch (FileNotFoundException ex) {
+            System.out.println("Erro de arquivo não encontrado no método ler");
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void escrever(int idArq, String letra, int idCliente) {
+    public void escrever(String nomeArquivo, int qntLinhas, String texto, int idCliente) {
         try {
-
             Escrita escrita = null;
-            indiceEscritores[idCliente - 1]++;
 
-            switch (idArq) {
-                case 1:
-                    escrita = new Escrita(semaforoArq1, arq1, letra, indiceEscritores[idCliente - 1], idCliente);
+            switch (nomeArquivo) {
+                case "arquivo_1":
+                    escritor_arquivo_1 = new BufferedWriter(new FileWriter(caminho_arq_1, true));
+                    escrita = new Escrita(semaforoArq1, escritor_arquivo_1, qntLinhas, texto, idCliente);
                     break;
-                case 2:
-                    escrita = new Escrita(semaforoArq2, arq2, letra, indiceEscritores[idCliente - 1], idCliente);
+                case "arquivo_2":
+                    escritor_arquivo_2 = new BufferedWriter(new FileWriter(caminho_arq_2, true));
+                    escrita = new Escrita(semaforoArq2, escritor_arquivo_2, qntLinhas, texto, idCliente);
                     break;
-                case 3:
-                    escrita = new Escrita(semaforoArq3, arq3, letra, indiceEscritores[idCliente - 1], idCliente);
+                case "arquivo_3":
+                    escritor_arquivo_3 = new BufferedWriter(new FileWriter(caminho_arq_3, true));
+                    escrita = new Escrita(semaforoArq3, escritor_arquivo_3, qntLinhas, texto, idCliente);
                     break;
             }
 
@@ -72,14 +88,14 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
 
             thread.start();
 
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Erro no Array");
+        } catch (IOException ex) {
+            System.out.println("Erro de IO no método escrever.");
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public static void main(String[] args) {
         try {
-
             //Cria o servidor
             Servidor obj = new Servidor();
             //"Liga" o servidor com seu nome de registro
@@ -87,6 +103,8 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
 
             System.out.println("servidor registrado!");
 
+        } catch (IOException e){
+            System.out.println("Erro no arquivo.");
         } catch (Exception ex) {
             System.out.println("erro no servidor: " + ex.getMessage());
             ex.printStackTrace();

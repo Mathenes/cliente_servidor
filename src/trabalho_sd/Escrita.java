@@ -1,44 +1,50 @@
 package trabalho_sd;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Escrita implements Runnable {
 
     Semaforo semaforo;
-    List<String> arq;
-    String letra;
-    int id;
+    BufferedWriter escritorArquivo;
+    int qntLinhas;
+    String texto;
     int idCliente;
 
-    public Escrita(Semaforo semaforo, List<String> arq, String letra, int id, int idCliente) {
+    public Escrita(Semaforo semaforo, BufferedWriter escritorArquivo, int qntLinhas, String texto, int idCliente) {
         this.semaforo = semaforo;
-        this.arq = arq;
-        this.letra = letra;
-        this.id = id;
+        this.escritorArquivo = escritorArquivo;
+        this.qntLinhas = qntLinhas;
+        this.texto = texto;
         this.idCliente = idCliente;
     }
 
     @Override
     public void run() {
         try {
-            int i = 0;
-            while (true) {
-                i++;
-                semaforo.downEscrita();
-                
-                System.out.println("|cliente: " + idCliente + "|" + "escrita: " + id + "|" + "começou a escrever!");
-                arq.add(letra);
-                System.out.println("|cliente: " + idCliente + "|" + "escrita: " + id + "|" + "escreveu " + letra);
-                System.out.println("|cliente: " + idCliente + "|" + "escrita: " + id + "|" + "terminou de escrever!");
-                
-                semaforo.upEscrita();
-                
-                Thread.sleep(i % 200);
+            //Entrando na seção crítica
+            semaforo.downEscrita();
+            Thread.sleep((long) (Math.random() * 1000));
+
+            //Escrevendo a quantidade de linhas desejada
+            System.out.println("|cliente: " + idCliente + "|" + "começou a escrever!");
+            for (int j = 0; j < qntLinhas; j++) {
+                escritorArquivo.append(texto);
             }
+            escritorArquivo.close();
+            System.out.println("|cliente: " + idCliente + "|" + "terminou de escrever!");
+
+            //Saindo da seção crítica
+            semaforo.upEscrita();
 
         } catch (InterruptedException ex) {
+            Logger.getLogger(Escrita.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            System.out.println("Erro de IO.");
             Logger.getLogger(Escrita.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
