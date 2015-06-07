@@ -38,7 +38,7 @@ public class Escrita implements Runnable {
             //Escrevendo a quantidade de linhas desejada
             System.out.println("|cliente: " + idCliente + "|" + "começou a escrever!");
             for (int j = 0; j < qntLinhas; j++) {
-                escritorArquivo.append(texto);
+                escritorArquivo.append(texto + "\n");
             }
             escritorArquivo.close();
             System.out.println("|cliente: " + idCliente + "|" + "terminou de escrever!");
