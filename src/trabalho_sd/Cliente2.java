@@ -6,14 +6,18 @@ public class Cliente2 {
     // O objeto LerEscrever "obj" é o objeto que vai referenciar a interface
     static LerEscrever obj = null;
     
-    static final int id = 2;
+    static int id = 200;
 
     public static void main(String args[]) {
         try {
             obj = (LerEscrever) Naming.lookup("//localhost" + "/servidor");
             
-            for (int i = 0; i < 50; i++) {
-                obj.escrever("arquivo_1", 1,"bbbbbbbb", id);
+            for (int i = 0; i < 30; i++) {
+                Boolean resultado = obj.escrever("arquivo_1", 1,"bbbbbbbb", id++);
+                if(resultado == true)
+                    System.out.println("Escreveu!");
+                else
+                    System.out.println("Não escreveu!");
             }
             
 //            for (int i = 0; i < 100; i++) {
