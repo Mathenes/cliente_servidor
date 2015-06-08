@@ -2,6 +2,8 @@ package trabalho_sd;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +15,7 @@ public class Leitura implements Runnable {
     int numeroLinha;
     int qntLinhas;
     int idCliente;
+    volatile List<String> resultado  = new ArrayList<>();
 
     public Leitura(Semaforo semaforo, Semaforo_geral semaforoGeral, BufferedReader leitorArquivo, int numeroLinha, int qntLinhas, int idCliente) {
         this.semaforo = semaforo;
@@ -43,7 +46,7 @@ public class Leitura implements Runnable {
             int contadorLinhas = 0;
             String linha = leitorArquivo.readLine();
             while ((linha != null) && (contadorLinhas != qntLinhas)) {
-                System.out.println(linha);
+                resultado.add(linha);
                 linha = leitorArquivo.readLine();
                 contadorLinhas++;
             }
