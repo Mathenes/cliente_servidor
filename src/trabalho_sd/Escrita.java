@@ -13,6 +13,7 @@ public class Escrita implements Runnable {
     String texto;
     int idCliente;
     volatile Boolean resultado = false;
+    volatile Boolean terminou = false; 
 
     public Escrita(Semaforo semaforo, BufferedWriter escritorArquivo, int qntLinhas, String texto, int idCliente) {
         this.semaforo = semaforo;
@@ -41,6 +42,8 @@ public class Escrita implements Runnable {
             semaforo.upEscrita();
             
             resultado = true;
+            
+            terminou = true;
 
         } catch (InterruptedException ex) {
             Logger.getLogger(Escrita.class.getName()).log(Level.SEVERE, null, ex);

@@ -15,6 +15,7 @@ public class Leitura implements Runnable {
     int qntLinhas;
     int idCliente;
     volatile List<String> resultado  = new ArrayList<>();
+    volatile Boolean terminou = false;
 
     public Leitura(Semaforo semaforo, BufferedReader leitorArquivo, int numeroLinha, int qntLinhas, int idCliente) {
         this.semaforo = semaforo;
@@ -50,6 +51,9 @@ public class Leitura implements Runnable {
 
             //Saindo da seção crítica
             semaforo.upLeitura();
+            
+            terminou = true;
+            
             
         } catch (InterruptedException ex) {
             Logger.getLogger(Leitura.class.getName()).log(Level.SEVERE, null, ex);

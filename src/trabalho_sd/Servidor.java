@@ -49,14 +49,13 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
             Thread thread = new Thread(leitura);
             
             thread.start();
-            
         } catch (FileNotFoundException ex) {
             System.out.println("Erro de arquivo não encontrado no método ler");
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         //Espera o resultado chegar da thread
-        while(leitura.resultado.isEmpty()){
+        while( !leitura.terminou ){
         }
         
         return leitura.resultado;
@@ -92,7 +91,7 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
         }
         
         //Espera o resultado chegar da thread
-        while(escrita.resultado==false){
+        while(!escrita.terminou){
         }
         
         return escrita.resultado;

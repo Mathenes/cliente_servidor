@@ -15,7 +15,7 @@ public class Cliente3 {
 //            obj.ler("arquivo_1",3,1,id);
 //            obj.escrever("arquivo_2", 1,"cccccccc", id);
             for (int i = 0; i < 30; i++) {
-                Boolean resultado = obj.escrever("arquivo_1", 4,"cccccccc", id++);
+                Boolean resultado = obj.escrever("arquivo_2", 4,"cccccccc", id++);
                 if(resultado == true)
                     System.out.println("Escreveu!");
                 else
