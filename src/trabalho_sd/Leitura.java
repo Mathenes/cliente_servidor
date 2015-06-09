@@ -2,21 +2,23 @@ package trabalho_sd;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Leitura implements Runnable {
 
     Semaforo semaforo;
-    Semaforo_geral semaforoGeral;
     BufferedReader leitorArquivo;
     int numeroLinha;
     int qntLinhas;
     int idCliente;
+    volatile List<String> resultado  = new ArrayList<>();
+    volatile Boolean terminou = false;
 
-    public Leitura(Semaforo semaforo, Semaforo_geral semaforoGeral, BufferedReader leitorArquivo, int numeroLinha, int qntLinhas, int idCliente) {
+    public Leitura(Semaforo semaforo, BufferedReader leitorArquivo, int numeroLinha, int qntLinhas, int idCliente) {
         this.semaforo = semaforo;
-        this.semaforoGeral = semaforoGeral;
         this.leitorArquivo = leitorArquivo;
         this.numeroLinha = numeroLinha;
         this.qntLinhas = qntLinhas;
@@ -26,9 +28,6 @@ public class Leitura implements Runnable {
     @Override
     public void run() {
         try {
-            //Tratando a prioridade
-            semaforoGeral.downLeitura();
-            
             //Entrando na seção crítica
             semaforo.downLeitura();
             Thread.sleep((long) (Math.random() * 1000));
@@ -43,7 +42,7 @@ public class Leitura implements Runnable {
             int contadorLinhas = 0;
             String linha = leitorArquivo.readLine();
             while ((linha != null) && (contadorLinhas != qntLinhas)) {
-                System.out.println(linha);
+                resultado.add(linha);
                 linha = leitorArquivo.readLine();
                 contadorLinhas++;
             }
@@ -59,6 +58,7 @@ public class Leitura implements Runnable {
             System.out.println("Erro de IO.");
             Logger.getLogger(Leitura.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
 
+        terminou = true;
+    }
 }

@@ -1,9 +1,11 @@
 package trabalho_sd;
 
+//PRIORIDADE DE ESCRITA!!!
 public class Semaforo {
 
     private int mutex = 1;
     private int leitores = 0;
+    private int escritoresEsperando = 0;
 
     public synchronized void upLeitura() {
         leitores--;
@@ -11,7 +13,7 @@ public class Semaforo {
     }
 
     public synchronized void downLeitura() throws InterruptedException {
-        while (mutex <= 0) {
+        while (mutex <= 0 || escritoresEsperando > 0) {
             System.out.println("####### LEITURA BLOQUEADA #######");
             wait();
         }
@@ -26,11 +28,12 @@ public class Semaforo {
     }
 
     public synchronized void downEscrita() throws InterruptedException {
-        while (mutex <= 0 || leitores > 0) {
+        escritoresEsperando++;
+        while ( mutex <= 0 || leitores > 0) {
             System.out.println("###### ESCRITA BLOQUEADA #####");
             wait();
         }
-        
+        escritoresEsperando--;
         System.out.println("##### ESCRITA DESBLOQUEADA #####");
         mutex--;
     }

@@ -8,15 +8,15 @@ import java.util.logging.Logger;
 public class Escrita implements Runnable {
 
     Semaforo semaforo;
-    Semaforo_geral semaforoGeral;
     BufferedWriter escritorArquivo;
     int qntLinhas;
     String texto;
     int idCliente;
+    volatile Boolean resultado = false;
+    volatile Boolean terminou = false;
 
-    public Escrita(Semaforo semaforo, Semaforo_geral semaforoGeral, BufferedWriter escritorArquivo, int qntLinhas, String texto, int idCliente) {
+    public Escrita(Semaforo semaforo, BufferedWriter escritorArquivo, int qntLinhas, String texto, int idCliente) {
         this.semaforo = semaforo;
-        this.semaforoGeral = semaforoGeral;
         this.escritorArquivo = escritorArquivo;
         this.qntLinhas = qntLinhas;
         this.texto = texto;
@@ -26,9 +26,6 @@ public class Escrita implements Runnable {
     @Override
     public void run() {
         try {
-            //Tratando a prioridade
-            semaforoGeral.downEscrita();
-            
             //Entrando na seção crítica
             semaforo.downEscrita();
             Thread.sleep((long) (Math.random() * 1000));
@@ -44,8 +41,7 @@ public class Escrita implements Runnable {
             //Saindo da seção crítica
             semaforo.upEscrita();
             
-            //Liberando a prioridade
-            semaforoGeral.up();
+            resultado = true;
 
         } catch (InterruptedException ex) {
             Logger.getLogger(Escrita.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,6 +49,6 @@ public class Escrita implements Runnable {
             System.out.println("Erro de IO.");
             Logger.getLogger(Escrita.class.getName()).log(Level.SEVERE, null, ex);
         }
+        terminou = true;
     }
-
 }
