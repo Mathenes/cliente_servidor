@@ -52,15 +52,13 @@ public class Leitura implements Runnable {
             //Saindo da seção crítica
             semaforo.upLeitura();
             
-            terminou = true;
-            
-            
         } catch (InterruptedException ex) {
             Logger.getLogger(Leitura.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             System.out.println("Erro de IO.");
             Logger.getLogger(Leitura.class.getName()).log(Level.SEVERE, null, ex);
         }
+        terminou = true;
     }
 
 }

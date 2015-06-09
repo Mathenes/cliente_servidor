@@ -43,14 +43,13 @@ public class Escrita implements Runnable {
             
             resultado = true;
             
-            terminou = true;
-
         } catch (InterruptedException ex) {
             Logger.getLogger(Escrita.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             System.out.println("Erro de IO.");
             Logger.getLogger(Escrita.class.getName()).log(Level.SEVERE, null, ex);
         }
+        terminou = true;
     }
 
 }
