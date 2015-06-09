@@ -10,16 +10,15 @@ import java.util.logging.Logger;
 public class Leitura implements Runnable {
 
     Semaforo semaforo;
-    Semaforo_geral semaforoGeral;
     BufferedReader leitorArquivo;
     int numeroLinha;
     int qntLinhas;
     int idCliente;
     volatile List<String> resultado  = new ArrayList<>();
+    volatile Boolean terminou = false;
 
-    public Leitura(Semaforo semaforo, Semaforo_geral semaforoGeral, BufferedReader leitorArquivo, int numeroLinha, int qntLinhas, int idCliente) {
+    public Leitura(Semaforo semaforo, BufferedReader leitorArquivo, int numeroLinha, int qntLinhas, int idCliente) {
         this.semaforo = semaforo;
-        this.semaforoGeral = semaforoGeral;
         this.leitorArquivo = leitorArquivo;
         this.numeroLinha = numeroLinha;
         this.qntLinhas = qntLinhas;
@@ -29,9 +28,6 @@ public class Leitura implements Runnable {
     @Override
     public void run() {
         try {
-            //Tratando a prioridade
-            semaforoGeral.downLeitura();
-            
             //Entrando na seção crítica
             semaforo.downLeitura();
             Thread.sleep((long) (Math.random() * 1000));
@@ -56,9 +52,8 @@ public class Leitura implements Runnable {
             //Saindo da seção crítica
             semaforo.upLeitura();
             
-            //Liberando a prioridade
-            semaforoGeral.up();
-
+            terminou = true;
+            
         } catch (InterruptedException ex) {
             Logger.getLogger(Leitura.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

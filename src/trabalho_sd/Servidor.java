@@ -19,11 +19,6 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
     private Semaforo semaforoArq2 = new Semaforo();
     private Semaforo semaforoArq3 = new Semaforo();
 
-    //TODO: Pensar em um outro nome, pois semaforoGeral está confuso
-    private Semaforo_geral semaforoGeralArq1 = new Semaforo_geral();
-    private Semaforo_geral semaforoGeralArq2 = new Semaforo_geral();
-    private Semaforo_geral semaforoGeralArq3 = new Semaforo_geral();
-    
     String caminho_arq_1 = "arquivo_1.txt";
     String caminho_arq_2 = "arquivo_2.txt";
     String caminho_arq_3 = "arquivo_3.txt";
@@ -39,15 +34,15 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
             switch (nomeArquivo) {
                 case "arquivo_1":
                     BufferedReader leitor_arquivo_1 = new BufferedReader(new FileReader(caminho_arq_1));
-                    leitura = new Leitura(semaforoArq1, semaforoGeralArq1, leitor_arquivo_1, numeroLinha, qntLinhas, idCliente);
+                    leitura = new Leitura(semaforoArq1, leitor_arquivo_1, numeroLinha, qntLinhas, idCliente);
                     break;
                 case "arquivo_2":
                     BufferedReader leitor_arquivo_2 = new BufferedReader(new FileReader(caminho_arq_2));
-                    leitura = new Leitura(semaforoArq2, semaforoGeralArq2, leitor_arquivo_2, numeroLinha, qntLinhas, idCliente);
+                    leitura = new Leitura(semaforoArq2, leitor_arquivo_2, numeroLinha, qntLinhas, idCliente);
                     break;
                 case "arquivo_3":
                     BufferedReader leitor_arquivo_3 = new BufferedReader(new FileReader(caminho_arq_3));
-                    leitura = new Leitura(semaforoArq3, semaforoGeralArq3, leitor_arquivo_3, numeroLinha, qntLinhas, idCliente);
+                    leitura = new Leitura(semaforoArq3, leitor_arquivo_3, numeroLinha, qntLinhas, idCliente);
                     break;
             }
 
@@ -61,7 +56,7 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
         }
         
         //Espera o resultado chegar da thread
-        while(leitura.resultado.isEmpty()){
+        while(!leitura.terminou){
         }
         
         return leitura.resultado;
@@ -75,15 +70,15 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
             switch (nomeArquivo) {
                 case "arquivo_1":
                     BufferedWriter escritor_arquivo_1 = new BufferedWriter(new FileWriter(caminho_arq_1, true));
-                    escrita = new Escrita(semaforoArq1, semaforoGeralArq1, escritor_arquivo_1, qntLinhas, texto, idCliente);
+                    escrita = new Escrita(semaforoArq1, escritor_arquivo_1, qntLinhas, texto, idCliente);
                     break;
                 case "arquivo_2":
                     BufferedWriter escritor_arquivo_2 = new BufferedWriter(new FileWriter(caminho_arq_2, true));
-                    escrita = new Escrita(semaforoArq2, semaforoGeralArq2, escritor_arquivo_2, qntLinhas, texto, idCliente);
+                    escrita = new Escrita(semaforoArq2, escritor_arquivo_2, qntLinhas, texto, idCliente);
                     break;
                 case "arquivo_3":
                     BufferedWriter escritor_arquivo_3 = new BufferedWriter(new FileWriter(caminho_arq_3, true));
-                    escrita = new Escrita(semaforoArq3, semaforoGeralArq3, escritor_arquivo_3, qntLinhas, texto, idCliente);
+                    escrita = new Escrita(semaforoArq3, escritor_arquivo_3, qntLinhas, texto, idCliente);
                     break;
             }
 
@@ -97,7 +92,7 @@ public class Servidor extends UnicastRemoteObject implements LerEscrever {
         }
         
         //Espera o resultado chegar da thread
-        while(escrita.resultado==false){
+        while(!escrita.terminou){
         }
         
         return escrita.resultado;
